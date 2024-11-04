@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>フローティングナビゲーション付きSVGパターン表示</title>
+
+<!-- reset.css の読み込み -->
+<link rel="stylesheet" href="reset.css">
+
+<style>
+  /* 余白を完全にリセット */
+  html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  /* グリッドパターン用のスタイル */
+  .pattern-background {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 62px);
+    grid-auto-rows: 62px;
+    width: 100vw;
+    height: 100vh;
+    background-color: #f0f0f0;
+  }
+
+  .pattern-item {
+    width: 62px;
+    height: 62px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  /* フローティングナビゲーション */
+  .floating-nav {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 80px;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 50px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding-right: 10px;
+  }
+
+  .floating-nav button {
+    width: 150px;
+    height: 60px;
+    margin-left:10px;
+    float: left;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 30px;
+    color: #000;
+    transition: background-color 0.3s;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    background-color: none;
+  }
+
+  .floating-nav button.current {
+    background-color: #000;
+  }
+
+  .floating-nav button:hover {
+    background-color: #333;
+    color: white;
+  }
+</style>
+</head>
+<body>
+
+<div class="floating-nav">
+  <button onclick="setDisplayRatio(0.7)">Designer</button>
+  <button onclick="setDisplayRatio(0.5)">Engineer</button>
+  <button onclick="setDisplayRatio(0.3)">Planner</button>
+</div>
+
+<div class="pattern-background" id="patternBackground">
+  <!-- JavaScriptでアイコンを配置 -->
+</div>
+
+<script>
+  let displayRatio = 0.5; // 初期値
+
+  function setDisplayRatio(ratio) {
+    displayRatio = ratio;
+    generatePattern(); // パターンの再描画
+  }
+
+  const patternContainer = document.getElementById('patternBackground');
+  const rows = Math.ceil(window.innerHeight / 62);
+  const cols = Math.ceil(window.innerWidth / 62);
+
+  function generatePattern() {
+    patternContainer.innerHTML = ''; // 現在のパターンをクリア
+
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+        const item = document.createElement('div');
+        item.classList.add('pattern-item');
+
+        // 割合に基づきアイコンを設定
+        if (Math.random() < displayRatio) {
+          item.style.backgroundImage = "url('images/people_B_124.svg')";
+        } else {
+          item.style.backgroundImage = "url('images/people_A_124.svg')";
+        }
+
+        patternContainer.appendChild(item);
+      }
+    }
+  }
+
+  // 初期パターンの生成
+  generatePattern();
+</script>
+
+</body>
+</html>
